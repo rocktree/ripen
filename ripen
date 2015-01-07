@@ -65,7 +65,7 @@ fi
 # -------------------------------------- Install Git
 
 if [ $install_git = true ]; then
-  cmd "sudo apt-get install git-core -y"
+  cmd "apt-get install git-core -y"
   # need the double quotes to make it all the way through,
   # so we have to break this one out
   puts "[EXEC] git config --global user.name \"${git[name]}\"\n" "yellow"
@@ -73,6 +73,12 @@ if [ $install_git = true ]; then
   cmd "git config --global user.email ${git[email]}"
   cmd "git config --global color.ui ${git[colors]}"
   cmd "mv .gitconfig /home/$username/"
+fi
+
+# -------------------------------------- Install Nginx
+
+if [ $install_nginx = true ]; then
+  cmd "apt-get install nginx -y"
 fi
 
 
