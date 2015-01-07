@@ -1,17 +1,23 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-configfile='./ripen.conf'
-configfile_secured='/tmp/ripen.conf'
+# ==> Configuration
+# 
+# Load the configuration file. All of these values are
+# brought into this file automatically.
+# 
+# There is no security around this because we already assume
+# a root user is running this script.
+# 
+source "./ripen.conf"
 
-# check if the file contains something we don't want
-if egrep -q -v '^#|^[^ ]*=[^;]*' "$configfile"; then
-  echo "Config file is unclean, cleaning it..." >&2
-  # filter the original to a new file
-  egrep '^#|^[^ ]*=[^;&]*'  "$configfile" > "$configfile_secured"
-  configfile="$configfile_secured"
-fi
-
-# now source it, either the original or the filtered variant
-source "$configfile"
-
-echo $say
+# ==> Helpers
+# 
+# puts -> echo content with an optional color
+# 
+puts () {
+  if [ $2 ]; then
+    echo -e "${colors[$2]}$1${colors['white']}"
+  else
+    echo -e $1
+  fi
+}
