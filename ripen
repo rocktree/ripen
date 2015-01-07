@@ -1,23 +1,64 @@
 #!/usr/bin/env bash
 
-# ==> Configuration
-# 
+# -------------------------------------- Configuration
+
 # Load the configuration file. All of these values are
 # brought into this file automatically.
 # 
 # There is no security around this because we already assume
 # a root user is running this script.
 # 
+# First, we have to declare our associative array (to keep
+# it out of the config file).
+# 
+declare -A user
+declare -A colors
+
+# Load the config file
+# 
 source "./ripen.conf"
 
-# ==> Helpers
-# 
+# -------------------------------------- Helpers
+
 # puts -> echo content with an optional color
 # 
 puts () {
   if [ $2 ]; then
-    echo -e "${colors[$2]}$1${colors['white']}"
+    echo -e "${colors[$2]}$1${colors[white]}"
   else
     echo -e $1
   fi
 }
+
+# cmd -> use `puts` to execute and output a command
+# 
+cmd () {
+  puts "[EXEC] $1\n" "yellow"
+  $1
+}
+
+# append_to_file -> add a line to the end of a file
+append_to_file () {
+  puts "[EXEC] echo '$1' >> $2\n" "yellow"
+  echo $1 >> $2
+}
+
+# -------------------------------------- Add User
+
+# 
+if [ $add_user = true ]; then
+
+  # Encrypt password
+  password="print crypt(${user[password]}, \"aa\")"
+  password=$(perl -e "$password")
+
+  # Create the user
+  cmd "useradd --password $password ${user[options]} ${user[username]}"
+
+  # Add to the sudoers file if necessary
+  if [ ${user[sudo]} = true ]; then
+    cmd "cp /etc/sudoers /etc/sudoers.bak"
+    append_to_file "${user[username]}    ALL=(ALL:ALL) ALL" /etc/sudoers
+  fi
+
+fi
