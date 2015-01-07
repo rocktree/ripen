@@ -8,14 +8,13 @@
 # There is no security around this because we already assume
 # a root user is running this script.
 # 
-# First, we have to declare our associative array (to keep
-# it out of the config file).
+# Declare all associative arrays (vars in ripen.conf)
 # 
 declare -A user
+declare -A git
 declare -A colors
 
 # Load the config file
-# 
 source "./ripen.conf"
 
 # -------------------------------------- Helpers
@@ -37,6 +36,12 @@ cmd () {
   $1
 }
 
+# cmd_as_user -> run cmd as another user
+# 
+cmd_as_user () {
+  cmd "sudo -H -u $username $1"
+}
+
 # append_to_file -> add a line to the end of a file
 append_to_file () {
   puts "[EXEC] echo '$1' >> $2\n" "yellow"
@@ -45,14 +50,9 @@ append_to_file () {
 
 # -------------------------------------- Add User
 
-# 
 if [ $add_user = true ]; then
-
-  # Encrypt password
   password="print crypt(${user[password]}, \"aa\")"
   password=$(perl -e "$password")
-
-  # Create the user
   cmd "useradd --password $password ${user[options]} ${user[username]}"
 
   # Add to the sudoers file if necessary
@@ -60,5 +60,31 @@ if [ $add_user = true ]; then
     cmd "cp /etc/sudoers /etc/sudoers.bak"
     append_to_file "${user[username]}    ALL=(ALL:ALL) ALL" /etc/sudoers
   fi
-
 fi
+
+# -------------------------------------- Install Git
+
+if [ $install_git = true ]; then
+  cmd "sudo apt-get install git-core -y"
+  # need the double quotes to make it all the way through,
+  # so we have to break this one out
+  puts "[EXEC] git config --global user.name \"${git[name]}\"\n" "yellow"
+  git config --global user.name "${git[name]}"
+  cmd "git config --global user.email ${git[email]}"
+  cmd "git config --global color.ui ${git[colors]}"
+  cmd "mv .gitconfig /home/$username/"
+fi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
