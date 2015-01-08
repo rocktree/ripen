@@ -49,6 +49,11 @@ append_to_file () {
   echo $1 >> $2
 }
 
+# -------------------------------------- Update System
+
+cmd "apt-get -y update"
+cmd "apt-get -y upgrade"
+
 # -------------------------------------- Add User
 
 if [ $add_user = true ]; then
@@ -88,6 +93,12 @@ if [ $install_mysql = true ]; then
   debconf-set-selections <<< "mysql-server mysql-server/root_password password ${mysql[root_password]}"
   debconf-set-selections <<< "mysql-server mysql-server/root_password_again password ${mysql[root_password]}"
   cmd "apt-get -y install mysql-server"
+fi
+
+# -------------------------------------- Install PostgreSQL
+
+if [ $install_postgresql = true ]; then
+  cmd "apt-get -y install postgresql libpq-dev postgresql-contrib"
 fi
 
 
