@@ -20,6 +20,17 @@ source "./ripen.conf"
 
 # -------------------------------------- Helpers
 
+colors=(
+  ["black"]="\033[33;30m"
+  ["red"]="\033[33;31m"
+  ["green"]="\033[33;32m"
+  ["yellow"]="\033[33;33m"
+  ["blue"]="\033[33;34m"
+  ["purple"]="\033[33;35m"
+  ["cyan"]="\033[33;36m"
+  ["white"]="\033[33;37m"
+)
+
 # puts -> echo content with an optional color
 # 
 puts () {
