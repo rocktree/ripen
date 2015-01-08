@@ -69,7 +69,10 @@ fi
 
 # -------------------------------------- Development Libraries
 
-cmd "apt-get -y install $dev_libs"
+for i in "${dev_libs[@]}"
+do
+  cmd "apt-get -y install $i"
+done
 
 # -------------------------------------- Add User
 
