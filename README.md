@@ -2,10 +2,12 @@ Ripen
 ============
 
 If you web development machine is a fruit, Ripen is the thing that makes it not
-so green, and maybe a little soft, and kind of sweet.
+so green, and maybe a little soft, and kind of sweet. If your web development
+machine is not a fruit, you may have other issues.
 
-Ripen is a bash script that helps you go from an empty Debian/Ubuntu machine to
-a working web development or production environment, per your configuration.
+In different words, Ripen is a bash script that helps you go from an empty
+Debian/Ubuntu machine to a working web development or production environment,
+per your configuration.
 
 Requirements & Assumptions
 ------------
