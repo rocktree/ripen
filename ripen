@@ -13,6 +13,7 @@
 declare -A user
 declare -A git
 declare -A mysql
+declare -A swapfile
 declare -A colors
 
 # Load the config file
@@ -161,6 +162,20 @@ if [ $install_rbenv = true ]; then
     cmd "gem install bundler --no-ri --no-rdoc"
     cmd "rbenv rehash"
   fi
+fi
+
+# -------------------------------------- Swapfile
+
+if [ $add_swapfile = true ]; then
+  cmd "fallocate -l ${swapfile[size]} /swapfile"
+  cmd "chmod 600 /swapfile"
+  cmd "mkswap /swapfile"
+  cmd "swapon /swapfile"
+  append_to_file "/swapfile   none    swap    sw    0   0" "/etc/fstab"
+  cmd "sysctl vm.swappiness=${swapfile[swappiness]}"
+  append_to_file "vm.swappiness=${swapfile[swappiness]}" "/etc/sysctl.conf"
+  cmd "sysctl vm.vfs_cache_pressure=${swapfile[vfs_cache_pressure]}"
+  append_to_file "vm.vfs_cache_pressure = ${swapfile[vfs_cache_pressure]}" "/etc/sysctl.conf"
 fi
 
 # -------------------------------------- Reboot

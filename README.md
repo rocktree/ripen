@@ -172,6 +172,23 @@ manually (or you can contribute to this script!).
 * `install_bundler`: (default: `true`) Install Bundler once `rbenv` and `ruby`
   are ready. Ignore if `install_rbenv` is `false`.
 
+### Swapfile
+
+A swapfile can supplement your RAM by dedicating hard disk space to virtual
+memory. The commands here follow [this
+process](https://www.digitalocean.com/community/tutorials/how-to-add-swap-on-
+ubuntu-14-04).
+
+* `add_swapfile`: (default: `true`) Add a swapfile. **It's important you ensure
+  you don't already have a swapfile by running `swapon -s`.
+* `swapfile`: Swapfile attributes
+    * `size`: (default: `4G`) The amount of disk space to dedicate to the
+      swapfile.
+    * `swappiness`: (default: `10`) The swappiness of the system. The closer to
+      0, the less likely the kernel is to use swap space unless necessary.
+    * `vfs_cache_pressure`: (default: `50`) From Digital Ocean, "This setting
+      configures how much the system will choose to cache inode and dentry
+      information over other data."
 
 Contribution Guidelines
 ------------
