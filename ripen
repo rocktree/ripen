@@ -62,10 +62,14 @@ append_to_file () {
 
 # -------------------------------------- Update System
 
-if [ $update_system] = true ]; then
+if [ $update_system = true ]; then
   cmd "apt-get -y update --fix-missing"
   cmd "apt-get -y upgrade"
 fi
+
+# -------------------------------------- Development Libraries
+
+cmd "apt-get -y install $dev_libs"
 
 # -------------------------------------- Add User
 
@@ -115,6 +119,7 @@ fi
 # -------------------------------------- Install MySQL
 
 if [ $install_mysql = true ]; then
+  cmd "apt-get -y install libmysqlclient-dev"
   debconf-set-selections <<< "mysql-server mysql-server/root_password password ${mysql[root_password]}"
   debconf-set-selections <<< "mysql-server mysql-server/root_password_again password ${mysql[root_password]}"
   cmd "apt-get -y install mysql-server"
@@ -142,8 +147,6 @@ if [ $install_rbenv = true ]; then
 
   cmd "source $home/.bashrc"
   cmd "git clone https://github.com/sstephenson/ruby-build.git $home/.rbenv/plugins/ruby-build"
-
-  cmd "apt-get -y install build-essential zlib1g-dev libssl-dev libreadline-gplv2-dev python-software-properties make libxml2 libxml2-dev libxslt1-dev imagemagick libmagickwand-dev nodejs libmysqlclient-dev sudo libmagic-dev"
 
   cmd "rbenv install $ruby_version"
   cmd "rbenv global $ruby_version"
