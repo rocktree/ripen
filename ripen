@@ -63,7 +63,7 @@ append_to_file () {
 # -------------------------------------- Update System
 
 if [ $update_system] = true ]; then
-  cmd "apt-get -y update"
+  cmd "apt-get -y update --fix-missing"
   cmd "apt-get -y upgrade"
 fi
 
