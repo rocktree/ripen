@@ -20,6 +20,8 @@ source "./ripen.conf"
 
 # -------------------------------------- Helpers
 
+home="/home/$username"
+
 # puts -> echo content with an optional color
 # 
 puts () {
@@ -51,8 +53,10 @@ append_to_file () {
 
 # -------------------------------------- Update System
 
-cmd "apt-get -y update"
-cmd "apt-get -y upgrade"
+if [ $update_system] = true ]; then
+  cmd "apt-get -y update"
+  cmd "apt-get -y upgrade"
+fi
 
 # -------------------------------------- Add User
 
@@ -66,6 +70,15 @@ if [ $add_user = true ]; then
     cmd "cp /etc/sudoers /etc/sudoers.bak"
     append_to_file "${user[username]}    ALL=(ALL:ALL) ALL" /etc/sudoers
   fi
+fi
+
+# -------------------------------------- Add Bash Config
+
+if [ $adjust_bash_config = true ]; then
+  cmd "rm $home/.bash_profile"
+  cmd "rm $home/.profile"
+  cmd "rm $home/.bashrc"
+  cmd "curl $bashrc_url --output $home/.bashrc"
 fi
 
 # -------------------------------------- Install Git
@@ -99,6 +112,12 @@ fi
 
 if [ $install_postgresql = true ]; then
   cmd "apt-get -y install postgresql libpq-dev postgresql-contrib"
+fi
+
+# -------------------------------------- Install Ruby
+
+if [ $install_rbenv = true ]; then
+  cmd "git clone https://github.com/sstephenson/rbenv.git $home/.rbenv"
 fi
 
 
