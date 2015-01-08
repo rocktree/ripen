@@ -33,7 +33,7 @@ puts () {
 # cmd -> use `puts` to execute and output a command
 # 
 cmd () {
-  puts "[EXEC] $1\n" "yellow"
+  puts "\n[EXEC] $1" "yellow"
   $1
 }
 
@@ -45,7 +45,7 @@ cmd_as_user () {
 
 # append_to_file -> add a line to the end of a file
 append_to_file () {
-  puts "[EXEC] echo '$1' >> $2\n" "yellow"
+  puts "\n[EXEC] echo '$1' >> $2" "yellow"
   echo $1 >> $2
 }
 
@@ -88,7 +88,7 @@ if [ $install_git = true ]; then
   cmd "apt-get -y install git-core"
   # need the double quotes to make it all the way through,
   # so we have to break this one out
-  puts "[EXEC] git config --global user.name \"${git[name]}\"\n" "yellow"
+  puts "\n[EXEC] git config --global user.name \"${git[name]}\"" "yellow"
   git config --global user.name "${git[name]}"
   cmd "git config --global user.email ${git[email]}"
   cmd "git config --global color.ui ${git[colors]}"
@@ -125,7 +125,7 @@ if [ $install_rbenv = true ]; then
   cmd "rm $home/.bashrc"
   append_to_file 'export PATH="$HOME/.rbenv/bin:$PATH"' "$home/.bashrc"
   append_to_file 'eval "$(rbenv init -)"' "$home/.bashrc"
-  puts "[EXEC] cat $home/.bashrc.tmp >> $home/.bashrc\n" "yellow"
+  puts "\n[EXEC] cat $home/.bashrc.tmp >> $home/.bashrc" "yellow"
   echo "$(cat $home/.bashrc.tmp)" >> $home/.bashrc
   cmd "rm $home/.bashrc.tmp"
 
