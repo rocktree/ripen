@@ -20,8 +20,6 @@ source "./ripen.conf"
 
 # -------------------------------------- Helpers
 
-home="/home/$username"
-
 # puts -> echo content with an optional color
 # 
 puts () {
@@ -72,6 +70,9 @@ if [ $add_user = true ]; then
   fi
 fi
 
+home="/home/$username"
+export HOME=$home
+
 # -------------------------------------- Add Bash Config
 
 if [ $adjust_bash_config = true ]; then
@@ -117,19 +118,33 @@ fi
 # -------------------------------------- Install Ruby
 
 if [ $install_rbenv = true ]; then
+
   cmd "git clone https://github.com/sstephenson/rbenv.git $home/.rbenv"
+
+  cmd "mv $home/.bashrc $home/.bashrc.tmp"
+  cmd "rm $home/.bashrc"
+  append_to_file 'export PATH="$HOME/.rbenv/bin:$PATH"' "$home/.bashrc"
+  append_to_file 'eval "$(rbenv init -)"' "$home/.bashrc"
+  puts "[EXEC] cat $home/.bashrc.tmp >> $home/.bashrc\n" "yellow"
+  echo "$(cat $home/.bashrc.tmp)" >> $home/.bashrc
+  cmd "rm $home/.bashrc.tmp"
+
+  cmd "source $home/.bashrc"
+  cmd "git clone https://github.com/sstephenson/ruby-build.git $home/.rbenv/plugins/ruby-build"
+
+  cmd "apt-get -y install build-essential zlib1g-dev libssl-dev libreadline-gplv2-dev python-software-properties make libxml2 libxml2-dev libxslt1-dev imagemagick libmagickwand-dev nodejs libmysqlclient-dev sudo libmagic-dev"
+
+  cmd "rbenv install $ruby_version"
+  cmd "rbenv global $ruby_version"
+
+  if [ $install_bundler = true ]; then
+    cmd "gem install bundler --no-ri --no-rdocs"
+    cmd "rbenv rehash"
+  fi
 fi
 
+# -------------------------------------- Reboot
 
-
-
-
-
-
-
-
-
-
-
-
-
+if [ $reboot = true ]; then
+  cmd "reboot"
+fi
