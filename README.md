@@ -119,14 +119,20 @@ Here are the options, broken up by action block.
 ### Bash Config
 
 You probably want to add your own bash config, especially if you are creating a
-new user. Here we install the `.bashrc` file and get rid of other potential
-conflicts.
+new user. We give you the option to set the config file you want to use.
 
+* `bash_config_file`: (default: `bashrc`) The file your user uses for bash
+  configuration.
 * `adjust_bash_config`: (default: `true`) Replace the current bash config.
-* `bashrc_url`: (default:
-  `https://raw.githubusercontent.com/rocktree/ripen/master/bashrc`): A fully-
+* `bash_config_url`: (default: `dotfiles/bashrc` in this repo) A fully-
   qualified URL from which to pull the bash config. *Needs to be a plain text
   file*.
+* `add_bash_profile`: (default: `true`) Adds a `.profile` file in your user's
+  home directory which autoloads the `.bashrc` file. Only use this if you are
+  replacing `.bashrc`.
+* `bash_profile_url`: (default: `dotfiles/profile` in this repo) A fully-
+  qualified URL from which to pull for the `.profile` file. *Needs to be a
+  plain text file*.
 
 ### Git
 
