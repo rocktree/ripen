@@ -138,7 +138,7 @@ if [ $install_rbenv = true ]; then
   cmd "rbenv global $ruby_version"
 
   if [ $install_bundler = true ]; then
-    cmd "gem install bundler --no-ri --no-rdocs"
+    cmd "gem install bundler --no-ri --no-rdoc"
     cmd "rbenv rehash"
   fi
 fi
