@@ -89,6 +89,12 @@ Here are the options, broken up by action block.
   the task, which is usually required depending on what you updated and which
   packages/programs you've added.
 
+### Development Libraries
+
+* `dev_libs`: Development libraries to install. It is **highly recommended**
+  you just install all these libraries. But you can add others or leave this be
+  if you'd like.
+
 ### User Account
 
 * `add_user`: (default: `true`) Add a new user to the system.
