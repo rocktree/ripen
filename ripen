@@ -94,10 +94,13 @@ export HOME=$home
 # -------------------------------------- Add Bash Config
 
 if [ $adjust_bash_config = true ]; then
-  cmd "rm $home/.bash_profile"
-  cmd "rm $home/.profile"
-  cmd "rm $home/.bashrc"
-  cmd "curl $bash_config_url --output $home/.bash_profile"
+  cmd "rm $home/.$bash_config_file"
+  cmd "curl $bash_config_url --output $home/.$bash_config_file"
+
+  if [ $add_bash_profile = true ]; then
+    cmd "rm $home/.profile"
+    cmd "curl $bash_profile_url --output $home/.profile"
+  fi
 fi
 
 # -------------------------------------- Install Git
@@ -140,15 +143,15 @@ if [ $install_rbenv = true ]; then
 
   cmd "git clone https://github.com/sstephenson/rbenv.git $home/.rbenv"
 
-  cmd "mv $home/.bash_profile $home/.bash_profile.tmp"
-  cmd "rm $home/.bash_profile"
-  append_to_file 'export PATH="$HOME/.rbenv/bin:$PATH"' "$home/.bash_profile"
-  append_to_file 'eval "$(rbenv init -)"' "$home/.bash_profile"
-  puts "\n[EXEC] cat $home/.bash_profile.tmp >> $home/.bash_profile" "yellow"
-  echo "$(cat $home/.bash_profile.tmp)" >> $home/.bash_profile
-  cmd "rm $home/.bash_profile.tmp"
+  cmd "mv $home/.$bash_config_file $home/.$bash_config_file.tmp"
+  cmd "rm $home/.$bash_config_file"
+  append_to_file 'export PATH="$HOME/.rbenv/bin:$PATH"' "$home/.$bash_config_file"
+  append_to_file 'eval "$(rbenv init -)"' "$home/.$bash_config_file"
+  puts "\n[EXEC] cat $home/.$bash_config_file.tmp >> $home/.$bash_config_file" "yellow"
+  echo "$(cat $home/.$bash_config_file.tmp)" >> $home/.$bash_config_file
+  cmd "rm $home/.$bash_config_file.tmp"
 
-  cmd "source $home/.bash_profile"
+  cmd "source $home/.$bash_config_file"
   cmd "git clone https://github.com/sstephenson/ruby-build.git $home/.rbenv/plugins/ruby-build"
 
   cmd "rbenv install $ruby_version"
